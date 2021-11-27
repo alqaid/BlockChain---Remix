@@ -12,7 +12,9 @@ pragma solidity >=0.4.4 <0.9.0;
 /// @notice <Contrato estandard de iniciación>
 
 
- 
+
+// PARA EL USO  DE KECCAK
+pragma experimental ABIEncoderV2;
 
 
 contract funciones_globales{
@@ -62,4 +64,26 @@ contract funciones_globales{
     function txGasPrice() public view returns(uint){
         return tx.gasprice;
     }
+
+
+    // Calcular hash  con la función keccak256(bytes)
+    /* Usamos esta función para pasar a bytes distintos valores:
+      --  abi.encodePacked(valor1,valor2,valor3,....)
+      */
+    function cacularHash1(string memory _cadena) public pure returns(bytes32){
+        return keccak256(abi.encodePacked(_cadena));
+    }
+
+    // Calcular hash de varios argumentos
+    function cacularHash2(string memory _cadena, uint _numero, address _direccion) public pure returns(bytes32){
+        return keccak256(abi.encodePacked(_cadena,_numero,_direccion));
+    }
+
+     // Calcular hash de varios argumentos y algun añadido
+    function cacularHash3(string memory _cadena, uint _numero, address _direccion) public pure returns(bytes32){
+        string memory _variable ="asdf";
+        uint _valor = 33;
+        return keccak256(abi.encodePacked(_cadena,_numero,_direccion,_variable,_valor));
+    }
+
 }
