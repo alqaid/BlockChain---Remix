@@ -61,11 +61,17 @@ contract variables{
         interruptor = estado.ON;
     }
 
+    function apagar() public{
+        interruptor = estado.OFF;
+    }
+
     function fijarEstado(uint _v) public{
         interruptor = estado(_v);
     }
 
     function consultarEstado() public view returns(estado){
+        // si OFF posición 0 ---devuelve 0
+        // si ON  posición 1 ---devuelve 1
         return interruptor;
     }
 
