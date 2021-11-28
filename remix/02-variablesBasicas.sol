@@ -52,8 +52,8 @@ contract variables{
 //   ------------------------------------------------------------------
 
 // Enums -- Tipos de Datos Enumerables (SOLO SE MANEAJO ÍNDICES: 0 1 2 ....)
-// --------------- Ejemplo 1
-    enum estado{ON, OFF}
+// --------------- Ejemplo   sOLO DEVUELVE 0 o 1
+    enum estado{OFF, ON}
 
     estado interruptor;
 
@@ -69,7 +69,7 @@ contract variables{
         return interruptor;
     }
 
-// --------------- Ejemplo 2
+// --------------- Ejemplo 2   sOLO DEVUELVE 0 , 1 , 2 , 3
     enum direcciones{ARRIBA, ABAJO , DERECHA , IZQUIERDA}
     direcciones direccion = direcciones.ARRIBA;
 
