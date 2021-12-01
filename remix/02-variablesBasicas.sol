@@ -3,7 +3,8 @@ pragma solidity >=0.4.4 <0.9.0;
 
 contract variables{ 
 
-
+// EN SOLIDITY LOS NUMEROS RACIONALES NO ESTÁN IMPLEMENTADOS AÚN NO FUNCIONAN BIEN
+// MULTIPLICAMOS *100 EN TODO CASO PARA TRABAJAR CON LA UNIDAD DEL EURO.
 // Variables sin signo
     uint varUint = 5;
 
