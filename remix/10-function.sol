@@ -40,6 +40,17 @@ pragma solidity >=0.4.4 <0.9.0;
              cada vez que se ejecute la funcion
 
 
+************** ************** ************** ************** **************
+************** *********   MODIFICADORES    ************* ************
+************** ********* internal external  ************* ************
+************** ************** ************** ************** **************  
+
+    function f () [] [] [] [] ([]) * {}
+
+    internal: parecido a a private solo desde el contratos
+    external: solo puede ser llamado externamente * cuesta menos gas
+
+
 
 */ 
 contract FuncionesGenerales{
