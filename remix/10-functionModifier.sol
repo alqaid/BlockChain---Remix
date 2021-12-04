@@ -1,4 +1,3 @@
-
 pragma solidity >=0.4.4 <0.9.0;
 
 /* 
@@ -71,10 +70,10 @@ contract Modificadores{
 
 
 // Ejemplo 3
-// edad de conducción
+// edad de conducción, salta la excepción si => conducir(17)
 
     modifier MayorEdad(uint _edadMinima, uint _edadUsuario){
-        require(_edadMinima == _edadUsuario,"es menor de edada");
+        require(_edadMinima <= _edadUsuario,"es menor de edad");
         _;
     }
 
