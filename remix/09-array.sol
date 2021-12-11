@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.4.4 <0.9.0;
 //pragma experimental ABIEncoderV2;
 
@@ -78,6 +79,13 @@ contract ContratoArrays{
         return array_entero[_n];
     }
 
+// VISUALIZAR LOS ARRAYS
+    function fverMeses() public view  returns(string[12] memory){
+        return meses;
+    }
 
-
+    function fverEdades() public view  returns(uint[] memory){
+        return array_entero;
+    }
+ 
 }

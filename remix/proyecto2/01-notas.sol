@@ -43,7 +43,7 @@ contract Contrato_Notas {
     // solo para ver en el log que todo está ok.
     
     event event_alumno_evaluado(bytes32,uint);
-    event event_revision(bytes32);
+    event event_revision(string);
 
 
 // ------ MODIFICADORES ------------------------------
@@ -61,7 +61,7 @@ contract Contrato_Notas {
     function f_Evaluar(string memory _iDAlumno, uint _nota)
         public modificador_UnicamenteProfesor(msg.sender){
             //Función para evaluar a los alumnos
-
+            // las nostas se relaccionan por un hash
             // Hash del Alumno
             bytes32 hash_idAlumno = keccak256(abi.encodePacked(_iDAlumno));
 
@@ -71,6 +71,30 @@ contract Contrato_Notas {
             //Emitir evento
             emit event_alumno_evaluado(hash_idAlumno, _nota);
 
+    }
+
+    // Función para ver las notas
+    function f_VerNotas(string memory _iDAlumno)public view returns(uint){
+         // Hash del Alumno
+            bytes32 hash_idAlumno = keccak256(abi.encodePacked(_iDAlumno));
+        // Nota del alumno por hash
+        uint nota_alumno = mapping_Notas[hash_idAlumno];
+        return nota_alumno;
+
+    }
+
+    //Pedir revisión del Examen
+    function f_SolicitarRevision(string memory _iDAlumno) public {
+        array_Revisiones.push(_iDAlumno);
+        //Emiter evento
+        emit event_revision(_iDAlumno);
+    }
+
+     //Ver revisiones del Examen PRIVADA DEL PROFESOR
+    function f_VerRevision() public view 
+        modificador_UnicamenteProfesor(msg.sender)
+        returns(string[] memory){
+        return array_Revisiones;
     }
 
 }
