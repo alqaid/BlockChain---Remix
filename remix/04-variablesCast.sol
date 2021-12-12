@@ -1,6 +1,8 @@
 pragma solidity >=0.4.4 <0.9.0;
 
 
+//  ¡ NO PODEMOS PASAR UINT TO STRING, EXIXTE UNA FUNCIÓN AUXILIAR PARA ELLO
+
 contract cast{ 
 
     uint8 vuint8 = 80;   // rango:  0 -- 255
