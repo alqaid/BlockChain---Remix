@@ -89,6 +89,121 @@ contract Disney{
         token.increaseTotalSuply(_numTokens);
     } 
 
- 
+
+// ============================= GESTION DE DISNEY =============================  
+
+// ============================= GESTION DE DISNEY EVENTOS =============================  
+
+   event disfruta_atraccion(string,uint,address);
+   event nueva_atraccion(string, uint);
+   event baja_atraccion(string);
+// ============================= GESTION DE DISNEY ESTRUCTURAS =============================  
+
+   struct atraccion{
+      string nombre_atraccion;
+      uint precio_atraccion;
+      bool estado_atraccion;  // true atracción en uso
+   }
+// ============================= GESTION DE DISNEY mapping =============================  
+
+   mapping(string => atraccion) public MappingAtracciones;
+   mapping(address => string[]) MappingHistorialAtracciones;
+
+// ============================= GESTION DE DISNEY arrays =============================  
+
+   string [] ArrayAtracciones;
+
+// ============================= GESTION DE DISNEY funciones =============================  
+
+   // Atracciones
+   // Star Wars -> 2 Tokens
+   // Toy Story -> 5 Tokens
+   // Piratas caribe -> 8 Tokens
+
+
+
+
+   // Solo ejecutable por DISNEY
+   function FnuevaAtraccion(string memory _nombreAtraccion, uint _precio) public Unicamente(msg.sender){
+      // Alta de  nuevas atracciones
+      MappingAtracciones[_nombreAtraccion] = atraccion(_nombreAtraccion,_precio,true);
+      // almacenar en un array el nombre de la atracción
+      ArrayAtracciones.push(_nombreAtraccion);
+
+      // Emitimos el evento  para la nueva atracción
+      emit nueva_atraccion(_nombreAtraccion,_precio);
+   } 
+
+   // Solo ejecutable por DISNEY
+   function FbajaAtraccion(string memory _nombreAtraccion) public Unicamente(msg.sender){
+      // cambiamos el estado de la atracción
+      MappingAtracciones[_nombreAtraccion].estado_atraccion= false;
+
+      // Informamos a la red
+      emit baja_atraccion(_nombreAtraccion);
+   }
+
+   // Publica para todos
+   function FAtraccionesDisponibles() public view returns(string [] memory){
+      return ArrayAtracciones;
+   }
+
+   // Publica PAGAR para subir
+   function FSubirAtraccion(string memory _nombreAtraccion) public {
+      // Verifica si Está disponible
+      require(MappingAtracciones[_nombreAtraccion].estado_atraccion == true,
+         "Atraccion no disponible"
+         );
+      
+      // Preguntamos  que vale
+      uint tokens_atraccion = MappingAtracciones[_nombreAtraccion].precio_atraccion;
+
+      // verificamos si el cliente tiene tokens suficientes
+      require(tokens_atraccion <= MisTokens(),
+         "Necesitas comprar mas tokens");
+
+
+      // Transferencia de TOKENS
+      /* 
+         Necesario una funcion transferencia_disney en ERC20.sol
+         al usar transfer a pelo coge la dirección del contrato
+
+         Transferimos del address del cliente  msg.sender
+         al address del contrato: address(this)
+      */
+
+      token.transferencia_disney(msg.sender,address(this),tokens_atraccion);
+      
+
+      // Almacenar  Historial del cliente
+      MappingHistorialAtracciones[msg.sender].push(_nombreAtraccion);
+
+      
+      // emision del evento para disfrutar atracción
+      emit disfruta_atraccion(_nombreAtraccion,tokens_atraccion, msg.sender);
+
+
+   }
+
+ // Publica para todos
+   function FHistorial() public view returns(string [] memory){
+      // Ver el historial
+      return MappingHistorialAtracciones[msg.sender];
+   }
+
+
+ // Publica para todos
+   function FDevolverTokens(uint _numTokens) public payable{
+      // Tokens son positivos y tienes tantos como quieres devolver
+      require(_numTokens>0,"NO tienes tokens");
+      require(_numTokens <= MisTokens(),"NO tienes suficientes tokens");
+
+      // Devolver 
+       token.transferencia_disney(msg.sender,address(this),_numTokens);
+
+      // Devolvemos los eths.
+      msg.sender.transfer(PrecioToken(_numTokens));
+
+   }
 
 }
