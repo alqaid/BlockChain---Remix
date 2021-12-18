@@ -98,7 +98,7 @@ contract Disney{
     function GeneraTokens(uint _numTokens) public Unicamente(msg.sender){
         token.increaseTotalSuply(_numTokens);
     } 
-
+ 
 
  function RegalarTokens(address _usuario,uint _numTokens) public Unicamente(msg.sender){
         
