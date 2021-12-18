@@ -27,7 +27,7 @@ ADMINISTRADOR: 0.96318746 BNB
 contrato:      0.051      BNB   10    ALQ total ==  1000 TOKENS
 Maria:         0.9467     BNB    0,48 ALQ    ==       48 TOKENS
 
-  
+    
 ===========================================
         DESPLIEGUE EN SMART CHAIN BINABI (CON intercambio de tokens)
 
