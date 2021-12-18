@@ -1,0 +1,42 @@
+CONTRATO DESPLEGADO EN RINKEBY
+
+Dirección del owner: 0xBb5a79436bebbe5C533918e3456474Bbd20b16d6
+Dirección del contrato: 0x7300ebBdC4367F545FE79312f0d63Ff9cC2EBD67
+
+1º Para ver los tokens, importar en el Administrador la moneda con el address del contrato.
+    0x7300ebBdC4367F545FE79312f0d63Ff9cC2EBD67
+    ALQ
+    con 2 decimales
+
+Las compras de tokens desde remix hacerlas con 1 Finney que son 0.001 eths.
+
+
+Administrador balance:  0.190605362466139796 
+contrato balance:       0.00022      TOTAL EN CIRCULACION 110 ALQ
+lucia balance:          0.0989       1,94 ALQ   
+
+===========================================
+        DESPLIEGUE EN SMART CHAIN BINABI
+
+ADMINISTRADOR:  0xBb5a79436bebbe5C533918e3456474Bbd20b16d6
+CONTRATO:       0x7300ebBdC4367F545FE79312f0d63Ff9cC2EBD67
+Maria:          0x334CbAA7222Fcff235e0226Bd5f9e6AaB31fB642
+lucia:          0.0989       1,94 ALQ  
+----------- BALANCES -----------
+ADMINISTRADOR: 0.96318746 BNB
+contrato:      0.051      BNB   10    ALQ total ==  1000 TOKENS
+Maria:         0.9467     BNB    0,48 ALQ    ==       48 TOKENS
+
+
+===========================================
+        DESPLIEGUE EN SMART CHAIN BINABI (CON intercambio de tokens)
+
+ADMINISTRADOR:  0xBb5a79436bebbe5C533918e3456474Bbd20b16d6
+CONTRATO:       0x7a466185C9cD7BC07f6D72fead9449929a4C89D9
+Maria:          0x334CbAA7222Fcff235e0226Bd5f9e6AaB31fB642
+lucia:           
+----------- BALANCES -----------
+ADMINISTRADOR: 0.96318746 BNB
+contrato:      0.051      BNB   10    ALQ total ==  1000 TOKENS
+Maria:         0.9467     BNB    0,48 ALQ    ==       48 TOKENS
+LUCIA:

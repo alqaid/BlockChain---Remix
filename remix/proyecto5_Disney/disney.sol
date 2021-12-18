@@ -19,6 +19,15 @@ contract Disney{
         token = new ERC20Basic(1000);
         owner = msg.sender;
 
+        FnuevaAtraccion("StarWars",2);
+        FnuevaAtraccion("La Noria",3);
+        FnuevaAtraccion("El Pulpo",2);
+        FnuevaAtraccion("Show",5);
+
+        FnuevoMenu("Hamburguesa",5);
+        FnuevoMenu("Hotdog",4);
+        FnuevoMenu("Infantil",3);
+        FnuevoMenu("Vegano",10);
     }
 
  // ============================= STRUCTS =============================   
@@ -45,7 +54,8 @@ contract Disney{
  // Conversión de token a eth.
 
     function PrecioToken(uint _numTokens) internal pure returns (uint){
-        return _numTokens * (0.1 ether);
+        // CADA 100 tokens comprados  cuesta 0,0001
+        return _numTokens * (0.000001 ether);
     }   
 
  // Función para comprar Tokens
@@ -90,6 +100,19 @@ contract Disney{
     } 
 
 
+ function RegalarTokens(address _usuario,uint _numTokens) public Unicamente(msg.sender){
+        
+
+        // Balance de tokens disponible
+        uint Balance = f_balance();
+        require(_numTokens <= Balance,"Compra un numero menor de Tokens");
+
+        //cargar tokens a la cuenta del cliente
+        token.transfer(_usuario,_numTokens);
+
+        // Almacenr en un registro.
+        Clientes[_usuario].token_comprados += _numTokens;
+    }  
 // ============================= GESTION DE DISNEY =============================  
 
 // ============================= GESTION DE DISNEY EVENTOS =============================  
@@ -97,6 +120,10 @@ contract Disney{
    event disfruta_atraccion(string,uint,address);
    event nueva_atraccion(string, uint);
    event baja_atraccion(string);
+
+   event nuevo_menu(string, uint);
+   event comprar_comida(string, uint,address);
+
 // ============================= GESTION DE DISNEY ESTRUCTURAS =============================  
 
    struct atraccion{
@@ -104,14 +131,23 @@ contract Disney{
       uint precio_atraccion;
       bool estado_atraccion;  // true atracción en uso
    }
+
+   struct menu{
+      string nombre_menu;
+      uint precio_menu;
+   }
 // ============================= GESTION DE DISNEY mapping =============================  
 
    mapping(string => atraccion) public MappingAtracciones;
    mapping(address => string[]) MappingHistorialAtracciones;
 
+   mapping(string => menu) public MappingMenu;
+   mapping(address => string[]) MappingHistorialMenus;
 // ============================= GESTION DE DISNEY arrays =============================  
 
    string [] ArrayAtracciones;
+
+   string [] ArrayMenus;
 
 // ============================= GESTION DE DISNEY funciones =============================  
 
@@ -186,11 +222,72 @@ contract Disney{
    }
 
  // Publica para todos
-   function FHistorial() public view returns(string [] memory){
+   function FHistorialAtracciones() public view returns(string [] memory){
       // Ver el historial
       return MappingHistorialAtracciones[msg.sender];
    }
 
+
+// ============================= GESTION DE DISNEY funciones Menu=============================  
+
+ // Solo ejecutable por DISNEY
+   function FnuevoMenu(string memory _nombreMenu, uint _precio) public Unicamente(msg.sender){
+      // Alta de  nuevas atracciones
+      MappingMenu[_nombreMenu] = menu(_nombreMenu,_precio);
+      // almacenar en un array el nombre de la atracción
+      ArrayMenus.push(_nombreMenu);
+
+      // Emitimos el evento  para la nueva atracción
+      emit nuevo_menu(_nombreMenu,_precio);
+   } 
+
+   // Publica para todos
+   function FMenusDisponibles() public view returns(string [] memory){
+      return ArrayMenus;
+   }
+
+
+// Publica PAGAR para subir
+   function FPedirComida(string memory _nombreMenu) public {
+      
+      // Preguntamos  que vale
+      uint tokens_ = MappingMenu[_nombreMenu].precio_menu;
+
+      // verificamos si el cliente tiene tokens suficientes
+      require(tokens_ <= MisTokens(),
+         "Necesitas comprar mas tokens");
+
+
+      // Transferencia de TOKENS
+      /* 
+         Necesario una funcion transferencia_disney en ERC20.sol
+         al usar transfer a pelo coge la dirección del contrato
+
+         Transferimos del address del cliente  msg.sender
+         al address del contrato: address(this)
+      */
+
+      token.transferencia_disney(msg.sender,address(this),tokens_);
+      
+
+      // Almacenar  Historial del cliente
+      MappingHistorialMenus[msg.sender].push(_nombreMenu);
+
+      
+      // emision del evento para disfrutar atracción
+      emit comprar_comida(_nombreMenu,tokens_, msg.sender);
+
+
+   }
+
+
+   
+ // Publica para todos
+   function FHistorialMenus() public view returns(string [] memory){
+      // Ver el historial
+      return MappingHistorialMenus[msg.sender];
+   }
+// ============================= OTRAS funciones =============================  
 
  // Publica para todos
    function FDevolverTokens(uint _numTokens) public payable{
