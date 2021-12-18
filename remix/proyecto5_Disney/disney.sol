@@ -3,7 +3,7 @@ pragma solidity >=0.4.4 <0.7.0;
 pragma experimental ABIEncoderV2;
 import "./ERC20.sol";
 
-// SAFEMATH NO hace falta si no se usa aqui solo dentro de ERC20
+// el SAFEMATH NO hace falta si no se usa aqui solo dentro de ERC20
 
 
 contract Disney{
