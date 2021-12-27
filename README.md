@@ -14,3 +14,8 @@ Para desplegar desde Remix podemos usar.
 
 # Enlace Recomendado
 https://www.udemy.com/share/104WIY3@BK10wUSUxpFDcsRIXJurHgGBS7DuwJrvxW9HfUYMBv-63fhRNWUti9b0lJHGD9Uk/
+
+# GITHUB de Joan Mengual
+https://github.com/joaneeet7/Solidity
+
+

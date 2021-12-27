@@ -14,7 +14,7 @@ contract InsuranceFactory is OperacionesBasicas{
         Aseguradora = msg.sender;
     }
 
-    ERC20basic private token;
+    ERC20Basic private token;
     address Insurance;   //dirección del contrato General INSURANCE
     address payable public Aseguradora;  // dirección de la aseguradora
     
@@ -115,16 +115,16 @@ contract InsuranceFactory is OperacionesBasicas{
     }
 
     function consultarHistorialAsegurados(address _direccionAsegurado, address _direccionConsultor)
-        public view Asegurado_o_aseguradora(_direccionAsegurado,_direccionConsultor)
+        public view Asegurado_o_Aseguradora(_direccionAsegurado,_direccionConsultor)
         returns (string memory){
             string memory historial = "";
             address direccionContratoAsegurado = MappingAsegurados[_direccionAsegurado].DireccionContrato;
-            for (uint i = 0; i < nombreServivios.length; i++){
-                if (MappingServicios[nombreServicios[i]].estadoServicio 
-                    && InsurenceHealthRecord(direccionContratoAsegurado).ServicioEstadoAsegurado(nombreServicio[i]) == true
+            for (uint i = 0; i < nombreServicios.length; i++){
+                if (MappingServicios[nombreServicios[i]].EstadoServicio 
+                    && InsuranceHealthRecord(direccionContratoAsegurado).ServicioEstadoAsegurado(nombreServicios[i]) == true
                     ){
-                        (string memory nombreServicio, uint precioServicio)= InsurenceHealthRecord(direccionContratoAsegurado).HistorialAsegurado(nombreServicio[i]);
-                        historial = string(abi.encodePacked(historial, "(" , nombreservicio, ", " , uint2str(precioServicio), ") ----- "));
+                        (string memory nombreServicio, uint precioServicio)= InsuranceHealthRecord(direccionContratoAsegurado).HistorialAsegurado(nombreServicios[i]);
+                        historial = string(abi.encodePacked(historial, "(" , nombreServicio, ", " , uint2str(precioServicio), ") ----- "));
                     }
             }
             return historial;
@@ -139,10 +139,10 @@ contract InsuranceFactory is OperacionesBasicas{
         emit EventoBajaAsegurado(_direccionAsegurado);
     }
 
-}
+
 
 // ============================= funciones de SERVICIOS============================= 
-    function nuevoServicio(string memory _nombreServicio, uint256 _precioServicios) 
+    function nuevoServicio(string memory _nombreServicio, uint256 _precioServicio) 
         public UnicamenteAseguradora(msg.sender)
         {
             MappingServicios[_nombreServicio]= servicio(_nombreServicio, _precioServicio, true);
@@ -151,7 +151,7 @@ contract InsuranceFactory is OperacionesBasicas{
         }
 
     function ServicioEstado(string memory _nombreServicio) 
-        public returns (bool)
+        public view returns (bool)
         {
             return MappingServicios[_nombreServicio].EstadoServicio;
         }
@@ -195,19 +195,19 @@ contract InsuranceFactory is OperacionesBasicas{
     function generarTokens(uint _numTokens) 
         public UnicamenteAseguradora(msg.sender)
     {
-        token.increaseTotalSupply(_numTokens);
+        token.increaseTotalSuply(_numTokens);
     }
 
     function compraTokens(address _asegurado, uint _numTokens) 
-        public payable UnicamenteAsegurado(_asegurado)
+        public payable UnicamenteAsegurados(_asegurado)
     {
         uint256 Balance = balanceOf();
-        require(_numTokens >= Balance, "Compra un numero de tokens inferior");
+        require(_numTokens <= Balance, "Compra un numero de tokens inferior");
         require(_numTokens > 0, "Compra numero positivo de Tokens");
         token.transfer(msg.sender,_numTokens);
         emit EventoComprado(_numTokens);
     }
-
+}
 
 // ============================= ============================= =============================
 // ============================= SMART CONTRACT ASEGURADO ============================= 
@@ -220,6 +220,7 @@ contract InsuranceHealthRecord is OperacionesBasicas{
         address direccionPropietario;
         uint saldoPropietario;
         Estado estado;
+        IERC20 tokens;
         address insurance;
         address payable aseguradora;
     }
@@ -328,7 +329,7 @@ contract InsuranceHealthRecord is OperacionesBasicas{
     function balanceOf() 
     public view  UnicamentePropietario(msg.sender) 
     returns(uint256 _balance){
-        return (propietario.token.balanceOf(address(this)));
+        return (propietario.tokens.balanceOf(address(this)));
     }
 
     function  CompraTokens(uint _numTokens)
@@ -351,8 +352,8 @@ contract InsuranceHealthRecord is OperacionesBasicas{
     function DevolverTokens(uint _numTokens)
     payable public UnicamentePropietario(msg.sender) 
     {
-        require(_numTokens >0 ,"No tienes Tokens");
-        require(_numTokens <=0 balanceOf(),"No tienes Tokens suficientes");
+        require(_numTokens > 0 ,"No tienes Tokens");
+        require(_numTokens <= balanceOf(),"No tienes Tokens suficientes");
 
         //calcularPrecioTokens -- está en el archivo Operacionebasicas.sol 
         uint coste=calcularPrecioTokens(_numTokens);
@@ -410,7 +411,7 @@ contract Laboratorio is OperacionesBasicas{
 // MODIFICADORES ----------------------------------------------------------------------------------
 
     modifier UnicamenteLab(address _direccion){
-        require(_direccionf == DireccionLab,"No existen permisos para esta funcion");
+        require(_direccion == DireccionLab,"No existen permisos para esta funcion");
         _;
     }
 
@@ -441,18 +442,33 @@ contract Laboratorio is OperacionesBasicas{
         IF.FuncionUnicamenteAsegurados(_asegurado);
 
         //ver si servicio disponible
-        require(serviciosLab[_servicio].enFuncionamiento == true,"Servicio NO disponible");
+        require(ServiciosLab[_servicio].enFuncionamiento == true,"Servicio NO disponible");
 
         // asignar al asegurado el servicio
         ServicioSolicitado[_asegurado] = _servicio;
-        PeticionesServicio.push(_asegurado);
+        PeticionesServicios.push(_asegurado);
 
         emit EventoDarServicio(_asegurado, _servicio);
     }
 
 
 
-// ============================= funciones de TOKENS del LABORATORIO ============================= 
+// ============================= funciones de RESULTADOS al Asegurado ============================= 
+
+    function DarResultados(address _direccionAsegurado, string memory _diagnostico, string memory _codigoIPFS)
+    public UnicamenteLab(msg.sender)
+    {
+        ResultadosServiciosLab[_direccionAsegurado] = ResultadoServicio(_diagnostico,_codigoIPFS);
+    }
+
+    function VisualizarResultados(address _direccionAsegurado)
+    public view
+    returns (string memory _diagnostico,string memory _codigoIPFS)
+    {
+        _diagnostico = ResultadosServiciosLab[_direccionAsegurado].diagnostico_Servicio;
+        _codigoIPFS = ResultadosServiciosLab[_direccionAsegurado].codigo_IPFS;
+       // NO ES NECESARIO ESTE RETURN return(_diagnostico,_codigoIPFS);
+    }
 
 
 }
