@@ -88,4 +88,17 @@ contract ContratoArrays{
         return array_entero;
     }
  
+
+  function fEliminarPersona(uint _posicion) public{
+        require(_posicion < personas.length, "index out of bound");
+
+        for (uint i = _posicion; i < personas.length - 1; i++) {
+            personas[i] = personas[i + 1];
+        }
+        personas.pop();
+    }
+
+    function fverPersonas() public view  returns(Persona[] memory){
+        return personas;
+    }
 }
